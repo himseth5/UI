@@ -1,0 +1,26 @@
+.logo {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10%;
+    margin-bottom: 5%;
+    width:2rem;
+    height:2rem;
+    object-fit: contain;
+  }
+  
+  .login-main-container{
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .login-input-container{
+    align-self: center;
+    
+  }
+  
+  .login-image{
+    width:70vw;
+    height:100vh;
+    object-fit: cover;
+  }
+  

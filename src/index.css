@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+*{
+  font-family: 'Poppins', sans-serif;
+  }
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+:root{
+  --border-color:rgb(185, 184, 184);
+  --brand-color:rgb(233, 79, 28);
+}
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar{
+  width: 0.25rem;
+  height: 0.25rem;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track{
+background-color: transparent;
+width:0.5rem;
+}
+
+::-webkit-scrollbar-thumb{
+  background: #888;
+  border-radius: 0.8rem;
+  height: 0.25rem;
+}

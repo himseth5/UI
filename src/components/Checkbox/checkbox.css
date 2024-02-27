@@ -1,0 +1,7 @@
+.checkbox-contnr{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between ;
+    min-width: fit-content;   
+    gap:0.5rem; 
+}

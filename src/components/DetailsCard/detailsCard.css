@@ -1,0 +1,57 @@
+.card{
+    
+    width: 16rem;
+    height: auto;
+    display: flex;
+    background-color: transparent;
+    
+}
+.text-subtitle-container{
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+    color: #333333;
+}
+
+.card-sub-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.card-header{
+    color: #333333;
+    padding: 4% 1%;
+    width: 100%;
+}
+
+.card-line{
+    border-left: 1px solid #cecece;
+    height: 80%;
+    margin: 8% 5% 8% 9%;
+}
+.card-progress-status{
+    padding: 9px;
+    width: 100%;
+    display: flex;
+    background: #fbeae4;
+    justify-content: center;
+    border-radius: .5rem;
+    margin-top: 2rem;
+}
+.card-status{
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 16rem;
+    height: 10rem;
+    
+}
+
+.card-header-status{
+    padding: 8% 0%;
+    color: #333333;
+    width: 100%;
+}

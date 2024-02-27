@@ -1,0 +1,48 @@
+.select-box-container-concept{
+    
+    min-width:fit-content;
+    width:68%;
+    height:1rem;
+    padding: 1rem;
+    border-radius: 0.4rem;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+}
+
+.select-box-container-review{
+    
+    min-width:fit-content;
+    width:30%;
+    height:1rem;
+    padding: 1rem;
+    border-radius: 0.4rem;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+}
+
+.select-options{
+    margin-left: 0.8rem;
+    outline: none;
+    border: none;
+    background: #f0f0f0;
+    font-weight: 600;
+    padding-right: 68%;
+}
+
+.select-options-status{
+    margin-left: 0.8rem;
+    outline: none;
+    border: none;
+    background: #f0f0f0;
+    font-weight: 600;
+    padding-right: 30%;
+}
+
+/* .options{
+    border-radius: 0.4rem;
+    display: flex;
+    flex-direction: column;
+    gap:0.5rem;
+} */
