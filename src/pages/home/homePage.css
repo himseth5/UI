@@ -10,7 +10,7 @@
    margin: 2rem;
    width:90%;
    border-radius: 0.8rem;
-   box-shadow:0rem 0rem 0.8rem 0 rgb(226, 223, 223);
+   box-shadow:0rem 0rem 1rem 0.6rem rgb(226, 223, 223);
 }
 
 .pagination-container{

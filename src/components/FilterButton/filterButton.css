@@ -1,0 +1,23 @@
+.filter-button{
+    text-align: center;
+    outline:none;
+    padding:0.25rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 0.8rem;
+    color:#666666;
+    border-color: #BEBEBE;
+    background-color: #DEDEDE;
+}
+
+.filter-button-clicked{
+    text-align: center;
+    outline:none;
+    padding:0.25rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 0.8rem;
+    color:#008B94;
+    background-color:#BEE7EA;
+    border-color: #53C9D1;
+}

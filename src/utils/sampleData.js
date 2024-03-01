@@ -1,4 +1,4 @@
-export const status = [{0:'Not Started'}, {1:'In Progress'}, {2:'Complete'}];
+export const status = [{0:'Not-Started'}, {1:'In-Progress'}, {2:'Complete'}];
 // export const concept = {
 //     Document_identifer: 
 //         [{

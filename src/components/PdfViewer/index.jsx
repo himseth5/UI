@@ -105,14 +105,13 @@ function PdfViewer(props) {
                 </div>
             </div>
             <div className="pdf-container">
-                <Document file={pdfurl} onLoadSuccess={handleDocumentLoadSuccess}>
+                <Document file={pdfurl} onLoadSuccess={handleDocumentLoadSuccess} onLoadError={(error)=>console.log("error while loading pdf",error.message)}>
                   
-                    <div>
                         <Page pageNumber={pageNumber}
                             customTextRenderer={textRenderer}
                             scale={scale}
                             width={pdfWidth} />
-                    </div>
+                    
                 </Document>
             </div>
 

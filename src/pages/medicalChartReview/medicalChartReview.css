@@ -30,22 +30,37 @@
 .pdfViewer-and-operations-container {
   display: flex;
   flex-direction: row;
-  /* padding-left:1.5rem;
-    padding-right: 1.5rem; */
-  margin-left: 2.5rem;
-  margin-right: 2.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-bottom: 2rem;
+  /* height: auto; */
 }
 
 .operation-container {
   display: flex;
   flex-direction: column;
-
-  width: 40%;
+  width: 50%;
+  height:100%;
   /*gap: 1rem;*/
   background: #fafafa;
-  margin-left: 2.5rem;
+  margin-left: 1rem;
   border-radius: 0.8rem;
 }
+
+.filter-container{
+  max-width:95%;
+  display: flex;
+  align-items: center;
+  margin:2%;
+  width:100%;
+  gap:1rem;
+}
+
+.clear-filter-button{
+  margin-left: auto;
+  color:#00A2F3;
+}
+
 
 .title-container {
   display: flex;
@@ -74,20 +89,37 @@
   border-radius: 0.5rem;
   padding: 5px;
 }
+.listwidth{
+  width: 98%;
+}
+.align-box{
+  display: flex;
+    align-items: center;
+}
 .ref-text-container {
   display: flex;
+  flex-direction: column;
   padding: 14px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 1rem;
   margin: 12px;
-  background: navajowhite;
+  background: white;
 }
 .llm-box-container {
   border: 1px solid #cecece;
-  width: 94%;
+  width: 96%;
   margin: 18px 14px;
   border-radius: 5px;
+}
+
+.count-circle{
+  background: #9c27b0 !important; 
+  text-align: center;
+}
+.pagenumclr{
+  color: white;
+  font-weight: 600;
 }
 
 .ref-item {
@@ -132,20 +164,36 @@
   height: 7rem;
 }
 .paste-icon {
-  color: #ccc;
+  color: #cecece;
   font-size: 1.5rem;
+  cursor: pointer;
 }
 .check {
   color: green;
+  cursor: pointer;
 }
 .cross {
   color: red;
+  cursor: pointer;
 }
 
+.check-disable {
+  color: #cecece;
+  cursor: pointer;
+}
+.cross-disable {
+  color: #cecece;
+  cursor: pointer;
+}
+.evidence-container{
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
 .box-container {
   background-color: #e4e2e2;
   margin: 0 15px;
-  border-bottom: groove;
+  padding: 8px 5px;
 }
 .save-btn-container {
   display: flex;
@@ -162,8 +210,14 @@
   display: flex;
   gap: 15px;
   padding: 1px 14px;
-  color: #ccc;
+  cursor: pointer;
+  color: #cecece;
   font-size: 1.25rem;
+}
+
+.copyTextSuccess{
+  font-size: .8rem;
+  color: darkgreen;
 }
 .username {
   display: flex;
@@ -196,6 +250,18 @@
 
 .select-concept-container {
   display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 12px;
+  font-weight: 700;
+  gap: 5px;
+  margin:2%;
+  margin-top:0.5%;
+}
+
+.select-notes-dd {
+  display: flex;
+  justify-content: flex-end;
   width: 100%;
   font-size: 12px;
   font-weight: 700;
@@ -238,3 +304,8 @@
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
+
+/* .checkbox-container-review{
+  display: flex;
+} */

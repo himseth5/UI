@@ -7,6 +7,7 @@ import HomePage from "./pages/home/HomePage";
 import { LoginPage } from "./pages/login/LoginPage";
 import MedicalChartReview from './pages/medicalChartReview'
 import NotFoundPage from "./pages/notfound/NotFoundPage";
+import PasswordResetPage from "./pages/passwordReset";
 
 const getUserData = () =>
   new Promise((resolve) =>
@@ -41,6 +42,10 @@ export const router = createBrowserRouter(
           <MedicalChartReview />
         </ProtectedRoute>
       }
+     />
+
+     <Route path='/passwordReset'
+     element={<PasswordResetPage/>}
      />
 
       <Route path="*" element={<NotFoundPage />} />

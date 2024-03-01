@@ -1,0 +1,17 @@
+.input-box-container{
+    display: flex;
+    justify-content: space-evenly;
+    gap:1rem;
+    align-items: center;
+}
+
+.input-box{
+    padding:0.5rem;
+    border-radius: 0.4rem;
+    outline:none;
+}
+
+.input-box-label{
+    width:10rem;
+    min-width: fit-content;
+}

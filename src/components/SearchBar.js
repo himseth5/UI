@@ -21,7 +21,6 @@ const SearchBar = ({ setSearchQuery }) => (
       variant="outlined"
       placeholder="Search..."
       size="small"
-    
     />
 
     <TextField
@@ -36,6 +35,7 @@ const SearchBar = ({ setSearchQuery }) => (
       size="small"
       type="Date"
     />
+
     <TextField
       id="Review"
       className="text"

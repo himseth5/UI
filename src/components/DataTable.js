@@ -11,12 +11,14 @@ import Paper from "@mui/material/Paper";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#FAFAFA",
-    color:'#cccccc'
+    color:'black',
+    fontWeight:'600',
+    fontFamily:'Poppins',
     // color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 12,
-    fontWeight:550,
+    fontSize: 12.5,
+    fontFamily:'Poppins',
   },
 }));
 
@@ -49,10 +51,10 @@ const DataTable = (props) => {
           <TableHead>
             <StyledTableRow sx={{borderBottom:"0.01rem solid #cccccc"}}>
               <StyledTableCell >Document Identifier</StyledTableCell>
-              <StyledTableCell align="center">Document Name</StyledTableCell>
+              <StyledTableCell align="left">Document Name</StyledTableCell>
               {/* <StyledTableCell align="center">File Path</StyledTableCell> */}
-              <StyledTableCell align="center">Evaluation Date</StyledTableCell>
-              <StyledTableCell align="right">Review Status</StyledTableCell>
+              <StyledTableCell align="left">Evaluation Date</StyledTableCell>
+              <StyledTableCell align="left">Review Status</StyledTableCell>
            
             </StyledTableRow>
           </TableHead>
@@ -60,17 +62,17 @@ const DataTable = (props) => {
             {rows?.slice(rowsPerPage*(page-1),(rowsPerPage*(page-1))+rowsPerPage)
             .map((row) => (
               <StyledTableRow
-                key={row.identifier}
+                key={row.Identifier}
                 sx={{ "&:last-child td, &:last-child th": {borderBottom:"0.01rem solid #cccccc"} }}
               >
             
                 <StyledTableCell sx={{color:'blue', cursor:'pointer'}} component="th" scope="row" onClick={()=>identifierClickHandler(row.Identifier)}>
                   {row.Identifier}
                 </StyledTableCell>
-                <StyledTableCell sx={{color:'blue', cursor:'pointer'}} align="center" onClick={filePathClickHandler}>{row.Document_Name}</StyledTableCell>
+                <StyledTableCell sx={{color:'blue', cursor:'pointer'}} align="left" onClick={filePathClickHandler}>{row.Document_Name}</StyledTableCell>
                 {/* <StyledTableCell align="center" >{row.Document_Path}</StyledTableCell> */}
-                <StyledTableCell align="center">{row.Document_Evaluation_dts}</StyledTableCell>
-                <StyledTableCell align="right">
+                <StyledTableCell sx={{color:'#535252',align:"left"}}>{new Date(row.Document_Evaluation_dts).toLocaleDateString()}</StyledTableCell>
+                <StyledTableCell sx={{color:'#535252',align:"left"}}>
                   {row.Document_Review_Status}
                 </StyledTableCell>
               </StyledTableRow>

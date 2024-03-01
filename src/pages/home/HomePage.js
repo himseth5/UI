@@ -19,16 +19,18 @@ const customStyles = {
   },
   content: {
     position: "absolute",
-    top: "40%",
-    left: "50%",
-    right: "2%",
-    bottom: "1%",
-    // marginRight: '-50%',
-    transform: "translate(-50%, -50%)",
-    zindex: "100",
+    top: "10%",
+    left: "15%",
+    right: "15%",
+    bottom: "5%",
+    overflow:'none',
+    paddingTop:'0',
+    outline:'none',
+    //  marginRight: '-50%',
+    // transform: "translate(-50%, -50%)",
+    // zindex: "100",
     // width:'fit-content',
     // height:'fit-content',
-    // overflow:'none'
   },
 };
 
@@ -46,7 +48,7 @@ const HomePage = () => {
   };
 
   const { docs, getPdfDocuments } = useContext(appContext);
-  const dataLength = docs?.length;
+  const dataLength = tableData?.length;
   const rowsPerPage = 10;
   const pageCount = Math.ceil(dataLength / rowsPerPage);
 
@@ -154,11 +156,13 @@ const HomePage = () => {
         style={customStyles}
         contentLabel="Pdf File"
       >
-        <IoIosCloseCircleOutline
-          className="close-button"
-          onClick={closeModal}
-        />
-        <PdfViewer pdfurl={pdfFile} />
+        <div className="modal-pdf-viewer-container">
+        <IoIosCloseCircleOutline className="close-button" title='close' onClick={closeModal}/>
+        <PdfViewer className='modal-pdf-viewer' 
+        pdfurl={
+    pdfFile
+      } />
+        </div>
       </Modal>
     </div>
   );

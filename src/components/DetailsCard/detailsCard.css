@@ -1,6 +1,13 @@
 .card{
-    
     width: 16rem;
+    height: auto;
+    display: flex;
+    background-color: transparent;
+    
+}
+
+.card:last-child{
+    width: 10rem;
     height: auto;
     display: flex;
     background-color: transparent;
@@ -10,9 +17,25 @@
     font-size: 13px;
     display: flex;
     flex-direction: column;
+    gap:0.2rem;
     margin-left: 5px;
     color: #333333;
+    padding-bottom: 0.5rem;
 }
+/* .data-and-label-container{
+    display: flex;
+     gap:0.25rem;
+} */
+.data-label{
+font-size: 12px;
+font-weight: 600;
+color:black;
+min-width: fit-content;
+}
+
+/* .data{
+width:10rem;
+} */
 
 .card-sub-container{
     display: flex;
@@ -29,6 +52,7 @@
     border-left: 1px solid #cecece;
     height: 80%;
     margin: 8% 5% 8% 9%;
+    
 }
 .card-progress-status{
     padding: 9px;
@@ -38,6 +62,8 @@
     justify-content: center;
     border-radius: .5rem;
     margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    
 }
 .card-status{
     

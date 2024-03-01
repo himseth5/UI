@@ -1,0 +1,23 @@
+.check {
+    color: green;
+    cursor: pointer;
+  }
+  .cross {
+    color: red;
+    cursor: pointer;
+  }
+  
+  .check-disable {
+    color: #cecece;
+    cursor: pointer;
+  }
+  .cross-disable {
+    color: #cecece;
+    cursor: pointer;
+  }
+
+  .feedback-container{
+    display: flex;
+    gap: 15px;
+
+  }
