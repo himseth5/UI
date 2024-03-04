@@ -6,18 +6,24 @@ import reportWebVitals from "./reportWebVitals";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AppContextProvider } from "./context/AppContext";
 import { RouterProvider } from "react-router-dom";
+import CircleLoader from "./components/CircleLoader/circleLoader";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Toast from "./components/Toast/toast";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const theme = createTheme({
   palette: {
-    primary: { main: "rgb(233, 79, 28)" }
-  }
+    primary: { main: "rgb(233, 79, 28)" },
+  },
 });
 root.render(
   <React.StrictMode>
     <AppContextProvider>
-    <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
+      <Toast />
+      <CircleLoader />
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </AppContextProvider>
   </React.StrictMode>

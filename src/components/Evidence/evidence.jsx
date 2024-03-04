@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaCopy } from "react-icons/fa";
 import UserFeedback from "../UserFeedback/userFeedback";
 
-const Evidence = ({ data }) => {
+import { appContext } from "../../context/AppContext";
+
+
+const Evidence = ({ data,storeReferenceTextInArray}) => {
   const [copySuccess, setCopySuccess] = useState("");
 
+  const { dispatch } = useContext(appContext);
 
- 
+  const onPageNumberClick = (pagenum) => {
+    
+    dispatch({ type: "SET_PAGENUMBER", payload: pagenum });
+  };
+
   const checkIsArray = (data) => {
     try {
       const str = data.replaceAll("'", '"');
@@ -69,7 +77,6 @@ const Evidence = ({ data }) => {
     }
   };
 
-  
   const clearCopyText = () => {
     setTimeout(() => {
       setCopySuccess("");
@@ -81,8 +88,14 @@ const Evidence = ({ data }) => {
         <div className="box-container">
           <div className="ref-text-container">
             <div>{item.Reference_Text}</div>
+            {storeReferenceTextInArray(item.Reference_Text)}
             <div className="person-icon count-circle">
-              <span className="pagenumclr">{item.Document_Page_Number}</span>
+              <span
+                className="pagenumclr"
+                onClick={() => onPageNumberClick(Number(item.Document_Page_Number))}
+              >
+                {item.Document_Page_Number}
+              </span>
             </div>
           </div>
 
@@ -122,7 +135,7 @@ const Evidence = ({ data }) => {
               <FaCopy />
             </span>
 
-           <UserFeedback feedback={item}/>
+            <UserFeedback feedback={item} />
             <span className="copyTextSuccess">{copySuccess}</span>
           </div>
         </div>

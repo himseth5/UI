@@ -36,12 +36,13 @@ const DataTable = (props) => {
   const {rows,page,rowsPerPage,handleIdentifierClick,handleFilePathClick}=props;
   
 
-  const identifierClickHandler=(id)=>{
-     handleIdentifierClick(id);
+  const identifierClickHandler=(id,documentPath,documentName)=>{
+     handleIdentifierClick(id,documentPath,documentName);
   }
 
-  const filePathClickHandler=()=>{
-    handleFilePathClick();
+  const filePathClickHandler=(documentPath,documentName)=>{
+     console.log("document path",documentPath);
+    handleFilePathClick(documentPath,documentName);
   }
 
   return (
@@ -66,10 +67,10 @@ const DataTable = (props) => {
                 sx={{ "&:last-child td, &:last-child th": {borderBottom:"0.01rem solid #cccccc"} }}
               >
             
-                <StyledTableCell sx={{color:'blue', cursor:'pointer'}} component="th" scope="row" onClick={()=>identifierClickHandler(row.Identifier)}>
+                <StyledTableCell sx={{color:'blue', cursor:'pointer'}} component="th" scope="row" onClick={()=>identifierClickHandler(row.Identifier,row.Document_Path,row.Document_Name)}>
                   {row.Identifier}
                 </StyledTableCell>
-                <StyledTableCell sx={{color:'blue', cursor:'pointer'}} align="left" onClick={filePathClickHandler}>{row.Document_Name}</StyledTableCell>
+                <StyledTableCell sx={{color:'blue', cursor:'pointer'}} align="left" onClick={()=>filePathClickHandler(row.Document_Path,row.Document_Name)}>{row.Document_Name}</StyledTableCell>
                 {/* <StyledTableCell align="center" >{row.Document_Path}</StyledTableCell> */}
                 <StyledTableCell sx={{color:'#535252',align:"left"}}>{new Date(row.Document_Evaluation_dts).toLocaleDateString()}</StyledTableCell>
                 <StyledTableCell sx={{color:'#535252',align:"left"}}>

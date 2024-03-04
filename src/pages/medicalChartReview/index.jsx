@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef, useCallback } from "react";
 import "./medicalChartReview.css";
 import DetailsCard from "../../components/DetailsCard";
 import PdfViewer from "../../components/PdfViewer";
@@ -22,14 +22,19 @@ function MedicalChartReview() {
     getDocumentDataPerIdentifier,
     getConceptEvidence,
     evidenceResult,
-    loading,
-    userName,
+
     updateClinicalDocumentSummary,
     updateDocumentStatus,
     dispatch,
   } = useContext(appContext);
+  const keyName = "userCredentials";
 
-  const [referenceText, setReferenceText] = useState(["lorem"]);
+  const [referenceText, setReferenceText] = useState(["Column 2", "Column 3"]);
+
+  const value = window.localStorage.getItem(keyName);
+  const userCredentials = JSON.parse(value);
+
+  const [selectedCDS, setSelectedCDS] = useState({});
   const [notStarted, setNotStarted] = useState(
     "Not-started".toLocaleLowerCase()
   );
@@ -38,6 +43,7 @@ function MedicalChartReview() {
   );
   const [complete, setCompleted] = useState("Complete".toLocaleLowerCase());
   const statusArray = [notStarted, inProgress, complete];
+
   const [selectedConcept, setSelectedConcept] = useState("");
   const [selectedCDSStatus, setSelectedCDSStatus] = useState("");
 
@@ -48,8 +54,51 @@ function MedicalChartReview() {
   const [clinicalDocument, setClinicalDocument] = useState([]);
   const [clinicalDocumentSummary, setclinicalDocumentSummary] = useState([]);
 
+  const [maxHeight, setMaxHeight] = useState(450);
+
+  const child1Ref = useRef(null);
+  const child2Ref = useRef(null);
+
+  const resizeCallback = useCallback(() => {
+    if (!child1Ref.current || !child2Ref.current) {
+      return;
+    }
+    const newMaxHeight = Math.max(
+      child1Ref.current.offsetHeight,
+      child2Ref.current.offsetHeight
+    );
+    setMaxHeight(newMaxHeight);
+  }, [child1Ref.current, child2Ref.current]);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(resizeCallback);
+    if (child1Ref.current) {
+      resizeObserver.observe(child1Ref.current);
+    }
+    if (child2Ref.current) {
+      resizeObserver.observe(child2Ref.current);
+    }
+
+    return function cleanup() {
+      resizeObserver.disconnect();
+    };
+  }, [resizeCallback]);
+
+  useEffect(() => {
+    if (child1Ref.current) {
+      child1Ref.current.style.height = `${maxHeight}px`;
+    }
+    if (child2Ref.current) {
+      child2Ref.current.style.height = `${maxHeight}px`;
+    }
+  }, [maxHeight]);
+
+  
+
   const location = useLocation();
   const documentIdentifier = location.state.identifier;
+  const pdfPath= location.state.documentPath;
+  const pdfName=location.state.documentName;
 
   useEffect(() => {
     getDocumentDataPerIdentifier(documentIdentifier);
@@ -63,7 +112,7 @@ function MedicalChartReview() {
     const cds = identifierDetails.clinical_document_summary;
     if (identifierDetails?.clinical_document_summary !== undefined) {
       const cdsid =
-        identifierDetails?.clinical_document_summary[0].CDS_Identifier;
+        identifierDetails?.clinical_document_summary[0]?.CDS_Identifier;
       // setSelectedConcept(cdsid);
     }
 
@@ -71,6 +120,7 @@ function MedicalChartReview() {
       statusArray.includes(item.Concept_Review_Status.toLowerCase())
     );
     setclinicalDocumentSummary(filterdDropdown);
+    
     setmasterDDArray(filterdDropdown);
   }, [identifierDetails]);
 
@@ -95,12 +145,20 @@ function MedicalChartReview() {
   const handleChange = (e) => {
     setpastedText(e.target.value);
   };
+
+  const getSelectedCDSObject = (id) => {
+    const obj = clinicalDocumentSummary.filter(
+      (item) => item.CDS_Identifier === id
+    )[0];
+    setpastedText(obj.User_Notes)
+    setSelectedCDS(obj);
+  };
   function handleDropDownSelection(value, field) {
-    console.log("value", value, field, statusArray);
     if (field === "concept") {
       setSelectedConcept(value);
       getConceptEvidence(value, statusArray);
-      console.log(selectedConcept, notStarted, inProgress, complete);
+      getSelectedCDSObject(value);
+      
     }
 
     if (field === "notes") {
@@ -116,10 +174,14 @@ function MedicalChartReview() {
     }
   };
 
+  function storeReferenceTextInArray(reference) {
+    console.log("reference is", reference, "reference array is", referenceText);
+    setReferenceText(...referenceText, reference);
+  }
   const buildCDSPostObject = (data) => {
     return {
       ...data,
-      User_Name: userName,
+      User_Name: userCredentials.email.split("@")[0],
       User_Notes: pastedText,
       Concept_Review_Status: selectedCDSStatus,
     };
@@ -128,7 +190,7 @@ function MedicalChartReview() {
   const buildDocumentPostObject = (data, docStatus) => {
     return {
       ...data,
-      User_Name: userName,
+      User_Name: userCredentials.email.split("@")[0],
 
       Document_Review_Status: docStatus,
     };
@@ -137,49 +199,55 @@ function MedicalChartReview() {
   const checkDocumentStatus = (status) => {
     return masterDDArray.filter(
       (item) =>
-        item.Concept_Review_Status.toLowerCase() ===
-        status.toLowerCase() && selectedConcept !== item.CDS_Identifier
+        item.Concept_Review_Status.toLowerCase() === status.toLowerCase() &&
+        selectedConcept !== item.CDS_Identifier
     );
   };
   const updateStates = () => {
-    const cdsRecord = clinicalDocumentSummary.filter((item)=> item.CDS_Identifier === selectedConcept)[0];
-    const documentRecord = clinicalDocument.filter((item)=> item.CDS_Identifier === clinicalDocument.Identifier)[0];
+    const cdsRecord = clinicalDocumentSummary.filter(
+      (item) => item.CDS_Identifier === selectedConcept
+    )[0];
+    const documentRecord = clinicalDocument.filter(
+      (item) => item.CDS_Identifier === clinicalDocument.Identifier
+    )[0];
     let docStatus = "";
-    const statusArray =checkDocumentStatus('In-Progress');
-    console.log(statusArray, "statusArray", masterDDArray.length-1);
-    if (statusArray.length > 0 || selectedCDSStatus.toLowerCase()==='In-Progress'.toLowerCase()) {
+    const statusArray = checkDocumentStatus("In-Progress");
+    
+    if (
+      statusArray.length > 0 ||
+      selectedCDSStatus.toLowerCase() === "In-Progress".toLowerCase()
+    ) {
       docStatus = "In-Progress";
     } else {
-      const NotStartedArray = checkDocumentStatus('Not-Started');
-      const completdArray = checkDocumentStatus('Completed')
-      if(NotStartedArray.length === masterDDArray.length-1 && selectedCDSStatus.toLowerCase()==='Not-Started'.toLowerCase()){
+      const NotStartedArray = checkDocumentStatus("Not-Started");
+      const completdArray = checkDocumentStatus("Completed");
+      if (
+        NotStartedArray.length === masterDDArray.length - 1 &&
+        selectedCDSStatus.toLowerCase() === "Not-Started".toLowerCase()
+      ) {
         docStatus = "Not-Started";
-      }else if(completdArray.length === masterDDArray.length-1 && selectedCDSStatus.toLowerCase()==='Complete'.toLowerCase){
+      } else if (
+        completdArray.length === masterDDArray.length - 1 &&
+        selectedCDSStatus.toLowerCase() === "Complete".toLowerCase
+      ) {
         docStatus = "Complete";
-      }else{
+      } else {
         docStatus = "Complete";
       }
-      console.log(completdArray, '----completdArray-----',selectedCDSStatus)
-console.log(NotStartedArray, '----NotStartedArray-----')
     }
-console.log(docStatus, 'docstatus')
 
-   // console.log(buildCDSPostObject(cdsRecord), 'CDS')
-    const doc = buildDocumentPostObject(documentRecord, docStatus);
-   //console.log(doc, 'Document')
-      updateClinicalDocumentSummary(
+    updateClinicalDocumentSummary(
       buildCDSPostObject(cdsRecord),
       selectedConcept
     )
       .then((response) => {
         const doc = buildDocumentPostObject(documentRecord, docStatus);
 
-        console.log(documentRecord,'CD')
-        updateDocumentStatus(doc, documentRecord.Identifier)
+        updateDocumentStatus(doc, documentRecord.Identifier);
       })
       .catch((error) => {
         console.log(error);
-      });  
+      });
   };
 
   return (
@@ -222,16 +290,19 @@ console.log(docStatus, 'docstatus')
         )}
       </div>
       <div className="pdfViewer-and-operations-container">
-        <PdfViewer
-          className={"pdfViewer-container"}
-          pdfurl={
-            //   "https://cenblob001.blob.core.windows.net/samplepdfstorage/Blank%20diagram%20(1).pdf?sp=r&st=2024-02-28T11:05:48Z&se=2024-02-29T00:05:48Z&sv=2022-11-02&sr=b&sig=CvhHK5U8u%2Fgzh6OGSg4eIyjoSi7LibZbobFNUPGEN9k%3D"
-            pdfFile
-          }
-          referenceTextInput={referenceText}
-        />
-
-        <div className="operation-container">
+        <div className="medicalchart-pdf-container" ref={child1Ref}>
+          <PdfViewer
+            className={"pdfViewer-container"}
+            pdfurl={
+              //   "https://cenblob001.blob.core.windows.net/ccpcont-incoming-pdf/ActemraPrior_Auth_Request_synthetic%201.pdf?sp=r&st=2024-03-04T10:13:34Z&se=2024-03-04T18:13:34Z&spr=https&sv=2022-11-02&sr=b&sig=%2B648YMXvSWIOYscqGseJ8U26qMKoepcLQ08bYI1ELXQ%3D"
+              pdfFile
+           //  pdfPath
+            }
+            pdfname={pdfName}
+            referenceTextInput={referenceText}
+          />
+        </div>
+        <div className="operation-container" ref={child2Ref}>
           <div className="filter-container">
             <h4>Filter by :</h4>
             <FilterButton
@@ -266,14 +337,20 @@ console.log(docStatus, 'docstatus')
             )}
           </div>
 
-          <Evidence data={evidenceResult} />
+          <Evidence
+            data={evidenceResult}
+            storeReferenceTextInArray={storeReferenceTextInArray}
+          />
           {selectedConcept !== "" && (
             <div className="llm-box-container">
               <div className="user-box-container">
                 <div className="person-icon">
                   <CgProfile className="profile-icon" />
                 </div>
-                <div className="username"> {userName}</div>
+                <div className="username">
+                  {" "}
+                  {userCredentials.email.split("@")[0]}
+                </div>
                 <div className="time">5 min ago</div>
               </div>
               <div className="text-field-container">
@@ -300,6 +377,8 @@ console.log(docStatus, 'docstatus')
                     <DropDownBox
                       label={""}
                       dropDownBoxData={status}
+                      type="notes"
+                      selectedValue={selectedCDS}
                       onSelect={(value) =>
                         handleDropDownSelection(value, "notes")
                       }
@@ -314,7 +393,7 @@ console.log(docStatus, 'docstatus')
               <div className="save-btn-container">
                 <Button
                   type="button"
-                  disabled={pastedText === ""}
+                  disabled={selectedConcept === ""}
                   style={{
                     backgroundColor: "rgb(233, 79, 28)",
                     borderRadius: "20px",

@@ -13,28 +13,32 @@ import {
 } from "../services/api";
 
 import { getDocuments } from "../services/apiConsume";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const initialState = {
-  loading: true,
+  loading: false,
   isLoggedIn: false,
-  userName: "",
+  userCredentials: null,
   docs: [],
   identifierDetails: {},
   evidenceResult: [],
   error: false,
+  pageNum: 0,
+  toastMessage: "",
+  messageType: "",
 };
 export const appContext = React.createContext(initialState);
 
 export const AppContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
-
+  const [userCredentials, setUserCredentials] = useLocalStorage(
+    "userCredentials",
+    null
+  );
   const getPdfDocuments = async () => {
     const url = getDocumentsUrl;
+    dispatch({ type: "GET_DOCUMENTS_START", payload: true });
     try {
-      //`http://localhost:3000/documents`;
-
-      // const res = await axios.get(url);
-      // const result = await res.data.res;
       const result = await getDocuments();
       let docs = [];
       docs = result?.map((item) => item);
@@ -49,6 +53,7 @@ export const AppContextProvider = ({ children }) => {
       credentials.email === "exl@exlservice.com" &&
       credentials.password === "password@123"
     ) {
+      setUserCredentials(credentials);
       dispatch({
         type: "SET_LOGIN",
         payload: credentials,
@@ -103,10 +108,16 @@ export const AppContextProvider = ({ children }) => {
     try {
       const res = await axios.put(URL, data);
       const result = await res.data;
-      console.log(result, "updated");
+      
     } catch (error) {}
   };
   const updateClinicalDocumentSummary = async (data, cds_identifier) => {
+    const payLoadObject = {
+      loading: true,
+      toastMessage: "",
+      taostType: "",
+    };
+    dispatch({ type: "UPDATE_CLINICAL_DOCUMENT_START", payload: payLoadObject });
     const URL = getCDSURL + `${cds_identifier}`;
     const configObject = {
       method: "PUT",
@@ -125,11 +136,17 @@ export const AppContextProvider = ({ children }) => {
   const updateDocumentStatus = async (data, identifier) => {
     const URL = getMainDocumentURL + `${identifier}`;
 
-    console.log(identifier,'identifier')
+    console.log(identifier, "identifier");
     try {
       const res = await axios.put(URL, data);
       const result = await res.data;
       console.log(result, "updated");
+      const payLoadObject = {
+        loading: false,
+        toastMessage: "Record Updated SuccessFully",
+        taostType: "Success",
+      };
+      dispatch({ type: "UPDATE_CLINICAL_DOCUMENT_SUCCESS", payload: payLoadObject });
     } catch (error) {}
   };
 
@@ -142,7 +159,11 @@ export const AppContextProvider = ({ children }) => {
         loading: state.loading,
         identifierDetails: state.identifierDetails,
         evidenceResult: state.evidenceResult,
-        userName: state.userName,
+        
+        pageNum: state.pageNum,
+        userCredentials: state.userCredentials,
+        messageType:state.messageType,
+        toastMessage:state.toastMessage,
         setLoggedInState,
         getPdfDocuments,
         getDocumentDataPerIdentifier,

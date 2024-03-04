@@ -6,9 +6,14 @@ export const AppReducer = (state, action) => {
       return {
         ...state,
         isLoggedIn: true,
-        userName: action.payload.email.split("@")[0],
+        userCredentials: action.payload,
       };
 
+    case "GET_DOCUMENTS_START":
+      return {
+        ...state,
+        loading: true,
+      };
     case "GET_DOCUMENTS":
       return {
         ...state,
@@ -28,6 +33,21 @@ export const AppReducer = (state, action) => {
         ...state,
         loading: action.payload,
       };
+    case "UPDATE_CLINICAL_DOCUMENT_START":
+      return {
+        ...state,
+        loading: action.payload.loading,
+        toastMessage: action.payload.toastMessage,
+        messageType: action.payload.taostType,
+      };
+    case "UPDATE_CLINICAL_DOCUMENT_SUCCESS":
+      return {
+        ...state,
+        loading: action.payload.loading,
+        toastMessage: action.payload.toastMessage,
+        messageType: action.payload.taostType,
+      };
+
     case "GET_EVIDENCE_START":
       return {
         ...state,
@@ -43,6 +63,11 @@ export const AppReducer = (state, action) => {
       return {
         ...state,
         evidenceResult: action.payload,
+      };
+    case "SET_PAGENUMBER":
+      return {
+        ...state,
+        pageNum: action.payload,
       };
     default:
       return state;
