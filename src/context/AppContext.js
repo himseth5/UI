@@ -111,6 +111,15 @@ export const AppContextProvider = ({ children }) => {
       
     } catch (error) {}
   };
+
+  const updateDocumentFeedback = async (data, cds_identifier) => {
+    const URL = getCDSURL + `${cds_identifier}`;
+    try {
+      const res = await axios.put(URL, data);
+      const result = await res.data;
+      
+    } catch (error) {}
+  };
   const updateClinicalDocumentSummary = async (data, cds_identifier) => {
     const payLoadObject = {
       loading: true,
@@ -136,11 +145,11 @@ export const AppContextProvider = ({ children }) => {
   const updateDocumentStatus = async (data, identifier) => {
     const URL = getMainDocumentURL + `${identifier}`;
 
-    console.log(identifier, "identifier");
+    
     try {
       const res = await axios.put(URL, data);
       const result = await res.data;
-      console.log(result, "updated");
+      
       const payLoadObject = {
         loading: false,
         toastMessage: "Record Updated SuccessFully",
@@ -169,6 +178,7 @@ export const AppContextProvider = ({ children }) => {
         getDocumentDataPerIdentifier,
         getConceptEvidence,
         updateUserFeedback,
+        updateDocumentFeedback,
         updateClinicalDocumentSummary,
         updateDocumentStatus,
         dispatch,

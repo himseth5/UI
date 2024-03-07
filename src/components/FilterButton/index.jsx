@@ -1,13 +1,20 @@
 import "./filterButton.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function FilterButton(props) {
   const [clicked, setClicked] = useState(true);
-  const { label, setLabel } = props;
+  const { label, setLabel,cleared,setCleared } = props;
+    
 
   const handleClick = () => {
+    if(cleared){
+      setClicked(false);
+      setCleared(false);
+    }
+    
     setClicked(!clicked);
+
 
     if (!clicked) {
       setLabel(label.toLowerCase());
@@ -18,7 +25,7 @@ function FilterButton(props) {
 
   return (
     <button
-      className={clicked ? "filter-button-clicked" : "filter-button"}
+      className={!clicked || cleared?"filter-button" : "filter-button-clicked"} 
       onClick={handleClick}
     >
       {label}

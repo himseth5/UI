@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { appContext } from "../../context/AppContext";
 import { useState } from "react";
 
-export default function CircleLoader() {
+ function CircleLoader() {
   const { loading } = useContext(appContext);
   const [open, setOpen] = useState(false);
 
@@ -29,3 +29,5 @@ export default function CircleLoader() {
     </div>
   );
 }
+export default React.memo(CircleLoader)
+

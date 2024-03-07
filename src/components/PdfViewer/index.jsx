@@ -19,7 +19,7 @@ function PdfViewer(props) {
   const [pageNumber, setPageNumber] = useState();
   const [searchTerm, setSearchTerm] = useState("");
   const [scale, setScale] = useState(1);
-  const [pdfWidth, setPdfWidth] = useState(800);
+  // const [pdfWidth, setPdfWidth] = useState(750);
 
   const { className, pdfurl, referenceTextInput,pdfname } = props;
   const { pageNum } = useContext(appContext);
@@ -106,9 +106,9 @@ function PdfViewer(props) {
     setScale(scale > 0 ? scale - 0.1 : 1);
   };
 
-  function handlePdfWidth() {
-    setPdfWidth(pdfWidth <= 1000 ? pdfWidth + 100 : 800);
-  }
+  // function handlePdfWidth() {
+  //   setPdfWidth(pdfWidth <= 1000 ? pdfWidth + 100 : 800);
+  // }
 
   return (
     <div className={className}>
@@ -152,11 +152,11 @@ function PdfViewer(props) {
             title="zoom out"
             onClick={handleZoomOut}
           />
-          <FaArrowsAltH
+          {/* <FaArrowsAltH
             className="pdf-icons"
             title="Increase pdf width"
             onClick={handlePdfWidth}
-          />
+          /> */}
           <input
             className="search-box"
             type="search"
@@ -177,7 +177,7 @@ function PdfViewer(props) {
             pageNumber={pageNumber}
             customTextRenderer={textRenderer}
             scale={scale}
-            width={pdfWidth}
+            width={750}
           />
         </Document>
       </div>

@@ -1,10 +1,16 @@
-import { useContext, useEffect, useState, useRef, useCallback } from "react";
+import {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import "./medicalChartReview.css";
 import DetailsCard from "../../components/DetailsCard";
 import PdfViewer from "../../components/PdfViewer";
 import pdfFile from "../../assets/sample_file.pdf";
 import DropDownBox from "../../components/DropDownBox";
-import Checkbox from "../../components/Checkbox";
 import { status } from "../../utils/sampleData";
 
 import TextField from "@mui/material/TextField";
@@ -15,6 +21,29 @@ import { appContext } from "../../context/AppContext";
 import { useLocation } from "react-router-dom";
 import Evidence from "../../components/Evidence/evidence";
 import FilterButton from "../../components/FilterButton";
+import Tooltip from "@mui/material/Tooltip";
+import { converUTCtoLoacle } from "../../utils/dateUtils";
+import Modal from "react-modal";
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import Accordion from "../../components/Accordion";
+
+const customStyles = {
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.75)", // This will give a semi-transparent dark background
+  },
+  content: {
+    position: "absolute",
+    top: "10%",
+    left: "15%",
+    right: "15%",
+    bottom: "5%",
+    overflow: "none",
+    paddingTop: "0",
+    outline: "none",
+  },
+};
+
+Modal.setAppElement("body");
 
 function MedicalChartReview() {
   const {
@@ -28,13 +57,15 @@ function MedicalChartReview() {
     dispatch,
   } = useContext(appContext);
   const keyName = "userCredentials";
+  let finalText = "";
 
   const [referenceText, setReferenceText] = useState(["Column 2", "Column 3"]);
 
   const value = window.localStorage.getItem(keyName);
   const userCredentials = JSON.parse(value);
 
-  const [selectedCDS, setSelectedCDS] = useState({});
+  const [selectedCDS, setSelectedCDS] = useState(undefined);
+  const [documentStatus, setDocStatus] = useState("");
   const [notStarted, setNotStarted] = useState(
     "Not-started".toLocaleLowerCase()
   );
@@ -43,6 +74,8 @@ function MedicalChartReview() {
   );
   const [complete, setCompleted] = useState("Complete".toLocaleLowerCase());
   const statusArray = [notStarted, inProgress, complete];
+
+  const [clear, setClear] = useState();
 
   const [selectedConcept, setSelectedConcept] = useState("");
   const [selectedCDSStatus, setSelectedCDSStatus] = useState("");
@@ -54,7 +87,9 @@ function MedicalChartReview() {
   const [clinicalDocument, setClinicalDocument] = useState([]);
   const [clinicalDocumentSummary, setclinicalDocumentSummary] = useState([]);
 
-  const [maxHeight, setMaxHeight] = useState(450);
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  const [maxHeight, setMaxHeight] = useState(600);
 
   const child1Ref = useRef(null);
   const child2Ref = useRef(null);
@@ -64,8 +99,8 @@ function MedicalChartReview() {
       return;
     }
     const newMaxHeight = Math.max(
-      child1Ref.current.offsetHeight,
-      child2Ref.current.offsetHeight
+      child1Ref.current.scrollHeight,
+      child2Ref.current.scrollHeight
     );
     setMaxHeight(newMaxHeight);
   }, [child1Ref.current, child2Ref.current]);
@@ -82,7 +117,7 @@ function MedicalChartReview() {
     return function cleanup() {
       resizeObserver.disconnect();
     };
-  }, [resizeCallback]);
+  }, [resizeCallback, child1Ref.current, child2Ref.current]);
 
   useEffect(() => {
     if (child1Ref.current) {
@@ -91,14 +126,25 @@ function MedicalChartReview() {
     if (child2Ref.current) {
       child2Ref.current.style.height = `${maxHeight}px`;
     }
-  }, [maxHeight]);
-
-  
+  }, [maxHeight, child1Ref.current, child2Ref.current]);
 
   const location = useLocation();
   const documentIdentifier = location.state.identifier;
-  const pdfPath= location.state.documentPath;
-  const pdfName=location.state.documentName;
+  const pdfPath = location.state.documentPath;
+  const pdfName = location.state.documentName;
+
+  //modal functions
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function handlePdfDoubleClick() {
+    openModal();
+  }
 
   useEffect(() => {
     getDocumentDataPerIdentifier(documentIdentifier);
@@ -120,7 +166,7 @@ function MedicalChartReview() {
       statusArray.includes(item.Concept_Review_Status.toLowerCase())
     );
     setclinicalDocumentSummary(filterdDropdown);
-    
+
     setmasterDDArray(filterdDropdown);
   }, [identifierDetails]);
 
@@ -142,6 +188,14 @@ function MedicalChartReview() {
     getConceptEvidence(cds_identifier, statusArray);
   };
 
+  //handle clear
+  const handleClearFilter = () => {
+    setClear(true);
+    setNotStarted(null);
+    setInProgress(null);
+    setCompleted(null);
+  };
+
   const handleChange = (e) => {
     setpastedText(e.target.value);
   };
@@ -150,7 +204,7 @@ function MedicalChartReview() {
     const obj = clinicalDocumentSummary.filter(
       (item) => item.CDS_Identifier === id
     )[0];
-    setpastedText(obj.User_Notes)
+    setpastedText(obj.User_Notes);
     setSelectedCDS(obj);
   };
   function handleDropDownSelection(value, field) {
@@ -158,7 +212,6 @@ function MedicalChartReview() {
       setSelectedConcept(value);
       getConceptEvidence(value, statusArray);
       getSelectedCDSObject(value);
-      
     }
 
     if (field === "notes") {
@@ -168,14 +221,18 @@ function MedicalChartReview() {
   const pasteText = async () => {
     try {
       const text = await navigator.clipboard.readText();
-      setpastedText(text);
+      const existingNotes = selectedCDS.User_Notes;
+      let holdText =
+        pastedText === "" ? text + "\n"+ existingNotes : pastedText + "\n"+ text;
+      finalText = holdText;
+
+      setpastedText(finalText);
     } catch (error) {
       console.log(error);
     }
   };
 
   function storeReferenceTextInArray(reference) {
-    console.log("reference is", reference, "reference array is", referenceText);
     setReferenceText(...referenceText, reference);
   }
   const buildCDSPostObject = (data) => {
@@ -212,7 +269,7 @@ function MedicalChartReview() {
     )[0];
     let docStatus = "";
     const statusArray = checkDocumentStatus("In-Progress");
-    
+
     if (
       statusArray.length > 0 ||
       selectedCDSStatus.toLowerCase() === "In-Progress".toLowerCase()
@@ -235,6 +292,8 @@ function MedicalChartReview() {
         docStatus = "Complete";
       }
     }
+
+    setDocStatus(docStatus);
 
     updateClinicalDocumentSummary(
       buildCDSPostObject(cdsRecord),
@@ -285,18 +344,23 @@ function MedicalChartReview() {
           <DetailsCard
             cardHeader={"Status"}
             cardData={clinicalDocument}
+            documentStatus={documentStatus}
             type={"status"}
           />
         )}
       </div>
       <div className="pdfViewer-and-operations-container">
-        <div className="medicalchart-pdf-container" ref={child1Ref}>
+        <div
+          className="medicalchart-pdf-container"
+          onDoubleClick={handlePdfDoubleClick}
+          ref={child1Ref}
+        >
           <PdfViewer
             className={"pdfViewer-container"}
             pdfurl={
               //   "https://cenblob001.blob.core.windows.net/ccpcont-incoming-pdf/ActemraPrior_Auth_Request_synthetic%201.pdf?sp=r&st=2024-03-04T10:13:34Z&se=2024-03-04T18:13:34Z&spr=https&sv=2022-11-02&sr=b&sig=%2B648YMXvSWIOYscqGseJ8U26qMKoepcLQ08bYI1ELXQ%3D"
               pdfFile
-           //  pdfPath
+              //  pdfPath
             }
             pdfname={pdfName}
             referenceTextInput={referenceText}
@@ -310,20 +374,28 @@ function MedicalChartReview() {
               setLabel={(lbl) => {
                 setNotStarted(lbl);
               }}
+              cleared={clear}
+              setCleared={setClear}
             />
             <FilterButton
               label={"In-Progress"}
               setLabel={(lbl) => {
                 setInProgress(lbl);
               }}
+              cleared={clear}
+              setCleared={setClear}
             />
             <FilterButton
               label={"Complete"}
               setLabel={(lbl) => {
                 setCompleted(lbl);
               }}
+              cleared={clear}
+              setCleared={setClear}
             />
-            <h5 className="clear-filter-button">Clear Filter</h5>
+            <h5 className="clear-filter-button" onClick={handleClearFilter}>
+              Clear Filter
+            </h5>
           </div>
           <div className="select-concept-container">
             {clinicalDocumentSummary && (
@@ -336,11 +408,20 @@ function MedicalChartReview() {
               />
             )}
           </div>
-
-          <Evidence
-            data={evidenceResult}
-            storeReferenceTextInArray={storeReferenceTextInArray}
-          />
+          <div>
+            {selectedCDS && (
+              <Accordion
+                accordionTitle={"Summary for All Evidences"}
+                accordionContent={selectedCDS}
+              />
+            )}
+          </div>
+          {evidenceResult && selectedCDS && (
+            <Evidence
+              data={evidenceResult}
+              storeReferenceTextInArray={storeReferenceTextInArray}
+            />
+          )}
           {selectedConcept !== "" && (
             <div className="llm-box-container">
               <div className="user-box-container">
@@ -351,7 +432,9 @@ function MedicalChartReview() {
                   {" "}
                   {userCredentials.email.split("@")[0]}
                 </div>
-                <div className="time">5 min ago</div>
+                <div className="time">
+                  {converUTCtoLoacle(selectedCDS.Last_Updated_Dts)} ago
+                </div>
               </div>
               <div className="text-field-container">
                 <div>
@@ -360,7 +443,7 @@ function MedicalChartReview() {
                     disableUnderline={false}
                     sx={{ width: "100%", padding: "10px 5px" }}
                     multiline
-                    maxRows={4}
+                    maxRows={8}
                     onChange={handleChange}
                     value={pastedText}
                     placeholder="Type anything…"
@@ -370,9 +453,11 @@ function MedicalChartReview() {
                   ></TextField>
                 </div>
                 <div className="btn-container">
-                  <div className="paste-icon" onClick={() => pasteText()}>
-                    <FaPaste />
-                  </div>
+                  <Tooltip title="Paste" placement="top-start">
+                    <div className="paste-icon" onClick={() => pasteText()}>
+                      <FaPaste />
+                    </div>
+                  </Tooltip>
                   <div className="select-notes-dd">
                     <DropDownBox
                       label={""}
@@ -412,6 +497,25 @@ function MedicalChartReview() {
           )}
         </div>
       </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Pdf File"
+      >
+        <div className="modal-pdf-viewer-container">
+          <IoIosCloseCircleOutline
+            className="close-button"
+            title="close"
+            onClick={closeModal}
+          />
+          <PdfViewer
+            className="modal-pdf-viewer"
+            pdfurl={pdfFile}
+            pdfname={pdfName}
+          />
+        </div>
+      </Modal>
     </div>
   );
 }

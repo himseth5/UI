@@ -1,17 +1,17 @@
+import * as React from "react";
 import { useContext, useState } from "react";
 import { FaCopy } from "react-icons/fa";
 import UserFeedback from "../UserFeedback/userFeedback";
 
 import { appContext } from "../../context/AppContext";
+import { Tooltip } from "@mui/material";
 
-
-const Evidence = ({ data,storeReferenceTextInArray}) => {
+const Evidence = ({ data, storeReferenceTextInArray }) => {
   const [copySuccess, setCopySuccess] = useState("");
 
-  const { dispatch } = useContext(appContext);
+  const { dispatch, updateUserFeedback, userCredentials } = useContext(appContext);
 
   const onPageNumberClick = (pagenum) => {
-    
     dispatch({ type: "SET_PAGENUMBER", payload: pagenum });
   };
 
@@ -77,6 +77,10 @@ const Evidence = ({ data,storeReferenceTextInArray}) => {
     }
   };
 
+  const updateFeedback = (value, identifier)=>{
+    updateUserFeedback(value, identifier);
+  }
+
   const clearCopyText = () => {
     setTimeout(() => {
       setCopySuccess("");
@@ -84,24 +88,14 @@ const Evidence = ({ data,storeReferenceTextInArray}) => {
   };
   return (
     <div className="evidence-container">
+      <div className="evidence-heading">Evidence of Concept(s) </div>
       {data?.map((item, index) => (
         <div className="box-container">
-          <div className="ref-text-container">
-            <div>{item.Reference_Text}</div>
-            {storeReferenceTextInArray(item.Reference_Text)}
-            <div className="person-icon count-circle">
-              <span
-                className="pagenumclr"
-                onClick={() => onPageNumberClick(Number(item.Document_Page_Number))}
-              >
-                {item.Document_Page_Number}
-              </span>
-            </div>
-          </div>
-
-          <div className="para-container">{item.Concept_LLM_Summary}</div>
+        
+          <div className="para-container"><span>Summary: &nbsp; </span>{item.Concept_LLM_Summary}</div>
 
           <div className="note-container">
+            <div className="note-container-div">Description: </div>
             <ul className="listwidth">
               <li className="list-style-none">
                 {checkIsArray(item.Response_Attribute) ? (
@@ -131,12 +125,28 @@ const Evidence = ({ data,storeReferenceTextInArray}) => {
             </ul>
           </div>
           <div className="icon-container">
-            <span onClick={() => copyText(item.Concept_LLM_Summary)}>
-              <FaCopy />
-            </span>
-
-            <UserFeedback feedback={item} />
-            <span className="copyTextSuccess">{copySuccess}</span>
+            <div className="feedback-container">
+              <Tooltip title="Copy" placement="top-start">
+                <span onClick={() => copyText(item.Concept_LLM_Summary)}>
+                  <FaCopy />
+                </span>
+              </Tooltip>
+              <UserFeedback feedback={item} updateUserFeedback = {updateFeedback} type={"CES"}/>
+            </div>
+            <div className="feedback-container">
+            <span className="page-font">Document Page</span>
+            <div className="person-icon count-circle">
+            
+              <span
+                className="pagenumclr"
+                onClick={() =>
+                  onPageNumberClick(Number(item.Document_Page_Number))
+                }
+              >
+                {item.Document_Page_Number}
+              </span>
+            </div>
+            </div>
           </div>
         </div>
       ))}
@@ -144,4 +154,4 @@ const Evidence = ({ data,storeReferenceTextInArray}) => {
   );
 };
 
-export default Evidence;
+export default React.memo(Evidence);

@@ -1,7 +1,7 @@
 import "./detailsCard.css";
 
 function DetailsCard(props) {
-  const { cardHeader, cardData, type } = props;
+  const { cardHeader, cardData, type, documentStatus } = props;
   const renderComponent = (type) => {
     const pageData = cardData[0];
 
@@ -67,7 +67,7 @@ function DetailsCard(props) {
           <div className="text-subtitle-container">
             {/* <div className="data-and-label-container"> */}
             <p>
-              <span className="data-label">Received:  </span>
+              <span className="data-label">Received: </span>
               {new Date(pageData.Document_Receive_dts).toLocaleDateString()}
             </p>
 
@@ -80,7 +80,11 @@ function DetailsCard(props) {
       case "status":
         return (
           <div className="card-progress-status">
-            <div>{pageData.Document_Review_Status}</div>
+            <div>
+              {documentStatus === ""
+                ? pageData.Document_Review_Status
+                : documentStatus}
+            </div>
           </div>
         );
 

@@ -19,5 +19,5 @@
   .feedback-container{
     display: flex;
     gap: 15px;
-
+    margin-right: 6px;
   }

@@ -1,9 +1,9 @@
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { appContext } from "../../context/AppContext";
 
-export default function Toast() {
+ function Toast() {
   const { toastMessage, messageType } = useContext(appContext);
   useEffect(() => {
     notify(messageType);
@@ -34,3 +34,5 @@ export default function Toast() {
     </>
   );
 }
+
+export default React.memo(Toast)

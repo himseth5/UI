@@ -1,39 +1,63 @@
-.accordion-container{
-    border: 0.01rem solid var(--brand-color);
-    border-radius: 0.4rem;
-    width:80%;
-    min-height: 2rem;
-    height:auto;
-    min-width: fit-content;
-    text-align: center;
+.accordion-container {
+  border: 0.01rem solid #cecece;
+  border-radius: 0.4rem;
+  width: 92%;
+  min-height: 2rem;
+  height: auto;
+  
+  
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-bottom: 2%;
+  margin-top: 2%;
+  margin-left: 1.2rem;
+}
+
+.accordion-title-container {
+  width: 100%;
+  min-height: 2rem;
+  align-self: flex-start;
+  border-radius: 0.4rem 0rem 0rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px;
+  border-bottom: 0.4px solid #ccc;
+}
+
+.accordion-title {
+  padding: 0.5rem;
+  color: black;
+  font-size: 1rem;
+  font-weight: 800;
+}
+.accordion-content {
+    height: auto;
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: left;
+    font-size: .85rem;
+
+}
+.document-feedback-container{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.accordion-collapse {
+  font-size: 1.6rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.accordion-content-container{
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content:flex-start;
-    gap:1rem;
-    margin-bottom: 2%;
-    margin-top: 2%;
+    gap: 5px;
+    align-self: flex-start;
+    width: 100%;
 }
-
-.accordion-title-container{
-    background-color:var(--brand-color);
-    width:100%;
-    min-height: 2rem;
-    align-self:flex-start;
-    border-radius: 0.4rem;
-}
-
-.accordion-title{
-    padding:0.5rem;
-    color: white;
-    font-size: 1rem;
-    font-weight: 800;
-
-}
-.accordion-content{
-    height:auto;
-    width:100%;
-    padding-left: 1rem;
-    padding-right:1rem;
-}
-
