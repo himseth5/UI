@@ -23,9 +23,9 @@ const customStyles = {
     left: "15%",
     right: "15%",
     bottom: "5%",
-    overflow:'none',
-    paddingTop:'0',
-    outline:'none',
+    overflow: "none",
+    paddingTop: "0",
+    outline: "none",
     //  marginRight: '-50%',
     // transform: "translate(-50%, -50%)",
     // zindex: "100",
@@ -40,8 +40,8 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [tableData, setTableData] = useState([]);
   const [modalIsOpen, setIsOpen] = React.useState(false);
-  const [pdfPath, setPdfPath]= useState();
-  const [pdfName,setPdfName]=useState('');
+  const [pdfPath, setPdfPath] = useState();
+  const [pdfName, setPdfName] = useState("");
 
   const [page, setPage] = React.useState(1);
 
@@ -92,8 +92,10 @@ const HomePage = () => {
 
   useEffect(() => setTableData(docs), [docs]);
 
-  function handleIdentifierClick(id,pdfPath,pdfName) {
-    navigate("/medicalChartReview", { state: { identifier: id , documentPath:pdfPath, documentName:pdfName} });
+  function handleIdentifierClick(id, pdfPath, pdfName) {
+    navigate("/medicalChartReview", {
+      state: { identifier: id, documentPath: pdfPath, documentName: pdfName },
+    });
   }
 
   function openModal() {
@@ -110,8 +112,7 @@ const HomePage = () => {
     setIsOpen(false);
   }
 
-  function handleFilePathClick(documentPath,documentName) {
-    
+  function handleFilePathClick(documentPath, documentName) {
     setPdfPath(documentPath);
     setPdfName(documentName);
     openModal();
@@ -162,10 +163,16 @@ const HomePage = () => {
         contentLabel="Pdf File"
       >
         <div className="modal-pdf-viewer-container">
-        <IoIosCloseCircleOutline className="close-button" title='close' onClick={closeModal}/>
-        <PdfViewer className='modal-pdf-viewer' 
-        pdfurl={pdfFile}
-        pdfname={pdfName} />
+          <IoIosCloseCircleOutline
+            className="close-button"
+            title="close"
+            onClick={closeModal}
+          />
+          <PdfViewer
+            className="modal-pdf-viewer"
+            pdfurl={pdfFile}
+            pdfname={pdfName}
+          />
         </div>
       </Modal>
     </div>

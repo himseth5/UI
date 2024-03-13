@@ -60,26 +60,43 @@
 }
 
 .login-input-container {
-  align-self: center;
+  /* align-self: center; */
   width: 30%;
+  display: flex;
+  flex-direction: column;
+  gap:20%;
+  align-items: center;
 }
 
 .logo {
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 10%;
-  margin-bottom: 5%;
-  margin-left: 5%;
-  width: 2rem;
-  height: 2rem;
+  /* display: flex;
+  justify-content: flex-start;*/ 
+  margin-top: 5%;
+  margin-bottom: 5%; 
+  width: 5rem;
+  height: 5rem;
   object-fit: contain;
 }
 
+.login-button{
+  width:70%;
+  min-width: fit-content;
+  text-align: center;
+  padding: 0.5rem;
+  border: 0.1rem solid var(--brand-color);
+  border-radius: 0.8rem;
+  background-color: var(--brand-color);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
 /* .login-msg {
   margin-left: 5%;
   margin-top: 5%;
 } */
 
+/*
 .email-container {
   display: flex;
   flex-direction: column;
@@ -131,25 +148,25 @@
 
 
 /* The switch - the box around the slider */
-.switch {
+/* .switch {
   position: relative;
   display: inline-flex;
   align-items: center;
-}
+} */
 
-.label {
+/* .label {
   color: #535252;
   margin-left: 10px;
-}
+} */
 /* Hide default HTML checkbox */
-.switch input {
+/* .switch input {
   opacity: 0;
   width: 0;
   height: 0;
-}
+} */
 
 /* The slider */
-.slider {
+/* .slider {
   position: relative;
   cursor: pointer;
   width: 53px;
@@ -183,13 +200,14 @@ input:focus + .slider {
 
 input:checked + .slider:before {
   transform: translateX(26px);
-}
+} */
 
 /* Rounded sliders */
-.slider.round {
+/* .slider.round {
   border-radius: 34px;
 }
 
 .slider.round:before {
   border-radius: 50%;
-}
+} */
+

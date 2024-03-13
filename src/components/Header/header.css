@@ -1,63 +1,62 @@
-.main-container{ 
- width: 100%;
- height:2%;
- display: flex;
- flex-direction: row;
- justify-content: space-between;
- align-items: center;
- background-color: white;
- padding-left:1rem ;
- padding-right: 1rem;
- border-bottom: 0.2rem solid var(--brand-color);
+.main-container {
+  width: 100%;
+  height: 2%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-bottom: 0.2rem solid var(--brand-color);
 }
 
-
-.brand-logo{
-    width:4rem;
-    height:4rem;
-    object-fit: contain;
-  }
-
-.project-title{
-    color:#333333;
+.brand-logo {
+  width: 4rem;
+  height: 4rem;
+  object-fit: contain;
 }
 
-.profile-icon-container{
-    /* border:0.01rem solid white; */
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;   
+.project-title {
+  color: #333333;
 }
 
-.user-name{
- padding-right: 5%;
+.profile-icon-container {
+  /* border:0.01rem solid white; */ 
+  display: flex;
+  align-items: center;
+  gap:2%;
 }
 
-.profile-icon{
-    width:2rem;
-    height:2rem;
-object-fit: cover;
-color:#333333;
+.user-name {
+    min-width: fit-content;
 }
 
-.profile-options{
-    width: fit-content;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top:10%;
-    left:auto;
-    right:1.8%;
-    z-index:2;
-    border: 0.1rem solid var(--border-color);
-    padding:0.8%;
-    border-radius: 0.4rem;
-    background-color: white;
-    cursor: pointer;
+.profile-icon {
+  border-radius: 50%;
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  color: #333333;
 }
 
-hr{
-    color:var(--brand-color);
+.profile-options {
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 10%;
+  left: auto;
+  right: 1.8%;
+  z-index: 2;
+  border: 0.1rem solid var(--border-color);
+  padding: 0.8%;
+  border-radius: 0.4rem;
+  background-color: white;
+  cursor: pointer;
+}
+
+hr {
+  color: var(--brand-color);
 }

@@ -11,6 +11,29 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Toast from "./components/Toast/toast";
 
+import App from "./App.jsx";
+import { PublicClientApplication, EventType } from "@azure/msal-browser";
+import { msalConfig } from "./authConfig";
+
+/**
+ * MSAL should be instantiated outside of the component tree to prevent it from being re-instantiated on re-renders.*/
+const msalInstance = new PublicClientApplication(msalConfig);
+
+// Default to using the first account if no account is active on page load
+if (
+  !msalInstance.getActiveAccount() &&
+  msalInstance.getAllAccounts().length > 0
+) {
+  // Account selection logic is app dependent. Adjust as needed for different use cases.
+  msalInstance.setActiveAccount(msalInstance.getAllAccounts()[0]);
+}
+
+msalInstance.addEventCallback((event) => {
+  if (event.eventType === EventType.LOGIN_SUCCESS && event.payload.account) {
+    msalInstance.setActiveAccount(event.payload.account);
+  }
+});
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const theme = createTheme({
   palette: {
@@ -23,7 +46,7 @@ root.render(
       <Toast />
       <CircleLoader />
       <ThemeProvider theme={theme}>
-        <RouterProvider router={router} />
+        <App instance={msalInstance} />
       </ThemeProvider>
     </AppContextProvider>
   </React.StrictMode>

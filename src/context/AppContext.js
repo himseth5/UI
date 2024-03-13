@@ -31,10 +31,7 @@ export const appContext = React.createContext(initialState);
 
 export const AppContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
-  const [userCredentials, setUserCredentials] = useLocalStorage(
-    "userCredentials",
-    null
-  );
+  
   const getPdfDocuments = async () => {
     const url = getDocumentsUrl;
     dispatch({ type: "GET_DOCUMENTS_START", payload: true });
@@ -53,7 +50,7 @@ export const AppContextProvider = ({ children }) => {
       credentials.email === "exl@exlservice.com" &&
       credentials.password === "password@123"
     ) {
-      setUserCredentials(credentials);
+      //setUserCredentials(credentials);
       dispatch({
         type: "SET_LOGIN",
         payload: credentials,
