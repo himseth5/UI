@@ -26,7 +26,7 @@ export const AppBar = () => {
 };
 
   function handleSignOut(){
-  handleLogoutRedirect();
+ // handleLogoutRedirect();
   localStorage.removeItem(keyName);
   navigate('/');    
   }
@@ -37,8 +37,8 @@ export const AppBar = () => {
         <img className="brand-logo" src={exlLogo} alt="exl" />
         <h3 className="project-title">Clinical CoPilot</h3>
         <div className="profile-icon-container" onClick={handleProfileClick}>
-          {/* <h4 className="user-name">{userCredentials?.email?.split("@")[0]}</h4> */}
-          <h5 className="user-name">{userCredentials?.name}</h5>
+          <h4 className="user-name">{userCredentials?.email?.split("@")[0]}</h4>
+          {/* <h5 className="user-name">{userCredentials?.name}</h5> */}
           <CgProfile className="profile-icon" />
         </div>
       </div>

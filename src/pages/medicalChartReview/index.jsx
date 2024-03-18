@@ -238,7 +238,8 @@ function MedicalChartReview() {
   const buildCDSPostObject = (data) => {
     return {
       ...data,
-      User_Name: userCredentials?.name,
+      // User_Name: userCredentials?.name,
+      User_Name:userCredentials.email.split("@")[0],
       User_Notes: pastedText,
       Concept_Review_Status: selectedCDSStatus,
     };
@@ -429,8 +430,9 @@ function MedicalChartReview() {
                   <CgProfile className="profile-icon" />
                 </div>
                 <div className="username">
-                  
-                  {userCredentials?.name}
+                {" "}
+                  {userCredentials.email.split("@")[0]}
+                  {/* {userCredentials?.name} */}
                 </div>
                 <div className="time">
                   {converUTCtoLoacle(selectedCDS.Last_Updated_Dts)} ago
