@@ -11,9 +11,9 @@ const Tabs = () => {
   return (
     <div className="Tabs">
       <ul className="nav">
-        <TabNavItem title="Step1: Review Medical Chart" id="tab1" activeTab={activeTab} setActiveTab={setActiveTab}/>
-        <TabNavItem title="Step2: Find Clinical Policy" id="tab2" activeTab={activeTab} setActiveTab={setActiveTab}/>
-        <TabNavItem title="Step3: Decision Support" id="tab3" activeTab={activeTab} setActiveTab={setActiveTab}/>
+        <TabNavItem title="Review Medical Chart" id="tab1" activeTab={activeTab} setActiveTab={setActiveTab}/>
+        <TabNavItem title="Find Clinical Policy" id="tab2" activeTab={activeTab} setActiveTab={setActiveTab}/>
+        <TabNavItem title="Decision Support" id="tab3" activeTab={activeTab} setActiveTab={setActiveTab}/>
       </ul>
  
       <div className="outlet">
