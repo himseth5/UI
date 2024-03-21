@@ -50,6 +50,16 @@ export const router = createBrowserRouter(
         }
       />
 
+<Route
+        path="/findClinicalPolicy"
+        element={
+          <ProtectedRoute>
+            {/* <MedicalChartReview /> */}
+            <Tabs />
+          </ProtectedRoute>
+        }
+      />
+
       <Route path="/passwordReset" element={<PasswordResetPage />} />
 
       <Route path="*" element={<NotFoundPage />} />

@@ -1,12 +1,15 @@
 import "./pdfViewer.css";
+import "react-pdf/dist/Page/TextLayer.css";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+
 import { useState, useCallback, useEffect, useContext } from "react";
 
-import { FaArrowsAltH } from "react-icons/fa";
 import { CiCircleChevLeft, CiCircleChevRight } from "react-icons/ci";
 import { MdZoomIn, MdZoomOut } from "react-icons/md";
 
 import { Document, Page, pdfjs } from "react-pdf";
 import { appContext } from "../../context/AppContext";
+import "@react-pdf-viewer/search/lib/styles/index.css";
 
 //import worker for react-pdf to work
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -19,25 +22,35 @@ function PdfViewer(props) {
   const [pageNumber, setPageNumber] = useState();
   const [searchTerm, setSearchTerm] = useState("");
   const [scale, setScale] = useState(1);
-  // const [pdfWidth, setPdfWidth] = useState(750);
+  const [pageContent, setPageContent] = useState("");
+  const [highlightedText, setHighlightedText] = useState('');
+  const [searchEntered, setSearchEntered] = useState(false);
+  // const [pageText, setPageText] = useState("");
+  const [searchFound,setSearchFound]= useState(false);
 
   const { className, pdfurl, referenceTextInput, pdfname } = props;
   const { pageNum } = useContext(appContext);
 
-  // useEffect(()=> console.log("we got referenceTExtInput:",...referenceTextInput),referenceTextInput)
+  // let searchFound = false;
+  let newPageNumber = 0;
+  let pageText = "";
 
   useEffect(() => {
-    console.log("page no. in useeffect", pageNum);
+    console.log("page no. in useEffect", pageNum);
     handlePageNumberClick(pageNum);
   }, [pageNum]);
+
+  useEffect(() => {
+    console.log("page no. here is:", pageNumber);
+  }, [pageNumber]);
 
   ///navigate to page no. on click
   function handlePageNumberClick(pageNum) {
     console.log("handlepagenumber called");
-    // if (pageNum > numPages || pageNum < numPages) {
-    //   alert(`pageno.${pageNum} is not available in this pdf`);
-    //   return;
-    // }
+    if (pageNum > numPages || pageNum < 0) {
+      alert(`pageno.${pageNum} is not available in this pdf`);
+      return;
+    }
     setPageNumber(pageNum);
   }
 
@@ -47,43 +60,81 @@ function PdfViewer(props) {
     setPageNumber(1);
   }
 
-  //outline
-  //   function onItemClick({ pageNumber: itemPageNumber }) {
-  //     setPageNumber(itemPageNumber);
-  //   }
-
-  //searchbox
-  function handleInputChange(e) {
-    setSearchTerm(e.target.value);
-  }
-
   // function handleReferenceText() {
   //   // setReferenceText({...referenceTextInput});
   // }
 
-  function highlightReferenceText(text, patterns) {
-    const combinedPattern = new RegExp(patterns.join("|"), "gi");
-    return text.replace(
+  function highlightReferenceText(text, references) {
+    const combinedPattern = new RegExp(references.join("|"), "gi");
+    return text.replaceAll(
       combinedPattern,
       (match) => `<mark style="background-color:red">${match}</mark>`
     );
   }
 
-  function highlightPattern(text, pattern) {
-    return text.replace(pattern, (match) => `<mark>${match}</mark>`);
+  //search Functionality
+  function handleInputChange(e) {
+    setSearchTerm(e.target.value);
+  }
+
+  const handleEnterPress = (e) => {
+    if (e.key === "Enter") {
+       setSearchFound(false);
+      pageText = highlightSearchTerm(pageContent, searchTerm);
+      console.log("final page text:", pageText);
+    }
+  };
+
+  function highlightSearchTerm(text, searchTerm) {
+    let index = text.indexOf(searchTerm);
+    console.log("index is:", index);
+    console.log("text passed is:", text);
+    console.log("pagecontent is:", pageContent);
+    console.log("page no. is:", pageNumber);
+    console.log("new Page no. is :", newPageNumber);
+    if (index === -1) {
+      handlePageChangeOnSearch();
+    } else {
+      setSearchFound(true);
+      setHighlightedText(text.replaceAll(searchTerm, (match) => `<mark>${match}</mark>`));
+    }
+  }
+
+  function handlePageChangeOnSearch() {
+    setPageNumber((prevPageNumber) => {
+      if (prevPageNumber < numPages && !searchFound) {
+        newPageNumber = prevPageNumber + 1;
+      }
+      return newPageNumber;
+    });
   }
 
   const textRenderer = useCallback(
     (textItem) => {
-      if (searchTerm) {
-        return highlightPattern(textItem.str, searchTerm);
+      // if (searchFound) {
+      //   return;
+      // }
+      console.log("text in page is:", textItem.str);
+      setPageContent((prevContent) => prevContent.concat(textItem.str));
+
+      if (searchFound) {
+        return highlightedText;
       }
-      if (referenceTextInput) {
+      if (searchTerm && !searchFound) {
+        highlightSearchTerm(textItem.str, searchTerm);
+        // console.log("final page text:", pageText);
+        // return pageText;
+      }
+
+      if (referenceTextInput.length > 0) {
         return highlightReferenceText(textItem.str, referenceTextInput);
       }
-      return textItem.str;
+
+      //setPageText(textItem.str);
+      console.log("final page text:", pageText);
+      return pageText;
     },
-    [searchTerm, referenceTextInput]
+    [referenceTextInput, pageNumber, highlightedText]
   );
 
   function changePage(offset) {
@@ -105,10 +156,6 @@ function PdfViewer(props) {
   const handleZoomOut = () => {
     setScale(scale > 0 ? scale - 0.1 : 1);
   };
-
-  // function handlePdfWidth() {
-  //   setPdfWidth(pdfWidth <= 1000 ? pdfWidth + 100 : 800);
-  // }
 
   return (
     <div className={className}>
@@ -152,16 +199,12 @@ function PdfViewer(props) {
             title="zoom out"
             onClick={handleZoomOut}
           />
-          {/* <FaArrowsAltH
-            className="pdf-icons"
-            title="Increase pdf width"
-            onClick={handlePdfWidth}
-          /> */}
           <input
             className="search-box"
             type="search"
             value={searchTerm}
             onChange={(e) => handleInputChange(e)}
+            onKeyDown={handleEnterPress}
           />
         </div>
       </div>
@@ -186,3 +229,64 @@ function PdfViewer(props) {
 }
 
 export default PdfViewer;
+
+// const searchPluginInstance=searchPlugin(
+//   {
+//     // Optional properties
+//     enableShortcuts: true, // Enable keyboard shortcuts (Ctrl + F)
+//     keyword: searchTerm, // Initial keyword to highlight
+//     renderHighlights: (props) => {
+//         // Customize the highlighted elements
+//         // Example: return your custom highlighted components
+//     },
+//     onHighlightKeyword: (keyword) => {
+//         // Invoked when a keyword is highlighted
+//         // Example: perform additional actions
+//     },
+// }
+// );
+
+//handle searching and navigation
+// const searchResults = useRef([]);
+// const resultIndex = useRef(0);
+// function searchPdf(pagesText, searchTerm) {
+//   // Reset search results and result index
+//   searchResults.current = [];
+//   resultIndex.current = 0;
+
+//   // Find all occurrences of the search term
+//   for (let i = 0; i < pagesText.length; i++) {
+//     if (pagesText[i].includes(searchTerm)) {
+//       searchResults.current.push(i + 1);
+//     }
+//   }
+
+//   // If no results, return
+//   if (searchResults.current.length === 0) {
+//     console.log('No matches found');
+//     return;
+//   }
+
+//   // Go to the first result
+//   goToNextResult();
+// }
+
+// function goToNextResult() {
+//   setPageNumber(searchResults.current[resultIndex.current]);
+//   resultIndex.current = (resultIndex.current + 1) % searchResults.current.length;
+// }
+
+// // Handle search and navigate on scroll
+// useEffect(() => {
+//   const handleScroll = (e) => {
+//     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+//       goToNextResult();
+//     }
+//   };
+
+//   window.addEventListener('scroll', handleScroll);
+
+//   return () => {
+//     window.removeEventListener('scroll', handleScroll);
+//   };
+// }, [resultIndex]);

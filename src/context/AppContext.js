@@ -104,6 +104,35 @@ export const AppContextProvider = ({ children }) => {
     }
   };
 
+
+//manipulated getconceptevidence
+const getAllConceptEvidence = async (cds_identifier) => {
+  // const reviewArray = reviewStatus.filter((item) => item !== "");
+  // if (
+  //   cds_identifier !== "" &&
+  //   cds_identifier !== undefined &&
+  //   reviewArray.length > 0
+  // ) {
+
+    const evidencURL = getEvidenceURL + `${cds_identifier}`;
+    dispatch({ type: "GET_EVIDENCE_START", payload: true });
+    try {
+      const res = await axios.get(evidencURL);
+      const result = await res.data.res.clinical_evidence_summary;
+
+      let evidenceDetails;
+      evidenceDetails = result?.filter(
+        (item) => item.CDS_Identifier === cds_identifier 
+      );
+
+      dispatch({ type: "GET_EVIDENCE", payload: evidenceDetails });
+    } catch (error) {
+      console.log(error);
+    }
+  
+};
+
+
   const updateUserFeedback = async (data, ces_identifier) => {
     const URL = getCESURL + `${ces_identifier}`;
     try {
@@ -178,6 +207,7 @@ export const AppContextProvider = ({ children }) => {
         getPdfDocuments,
         getDocumentDataPerIdentifier,
         getConceptEvidence,
+        getAllConceptEvidence,
         updateUserFeedback,
         updateDocumentFeedback,
         updateClinicalDocumentSummary,

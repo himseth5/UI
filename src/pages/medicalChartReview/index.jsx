@@ -9,7 +9,7 @@ import {
 import "./medicalChartReview.css";
 import DetailsCard from "../../components/DetailsCard";
 import PdfViewer from "../../components/PdfViewer";
-import pdfFile from "../../assets/sample_file.pdf";
+import pdfFile from "../../assets/ActemraPrior_Auth.pdf";
 import DropDownBox from "../../components/DropDownBox";
 import { status } from "../../utils/sampleData";
 
@@ -362,6 +362,7 @@ function MedicalChartReview() {
               //   "https://cenblob001.blob.core.windows.net/ccpcont-incoming-pdf/ActemraPrior_Auth_Request_synthetic%201.pdf?sp=r&st=2024-03-04T10:13:34Z&se=2024-03-04T18:13:34Z&spr=https&sv=2022-11-02&sr=b&sig=%2B648YMXvSWIOYscqGseJ8U26qMKoepcLQ08bYI1ELXQ%3D"
               pdfFile
               //  pdfPath
+              // "https://cenblob001.blob.core.windows.net/ccpcont-incoming-pdf/ActemraPrior_Auth_Request_synthetic%201.pdf?sp=r&st=2024-03-21T07:27:08Z&se=2024-03-21T15:27:08Z&sv=2022-11-02&sr=b&sig=O8hfNgTmXv%2B8R%2Fesl9paBfAAwlCtpvYOr5VI2I2smH4%3D"
             }
             pdfname={pdfName}
             referenceTextInput={referenceText}

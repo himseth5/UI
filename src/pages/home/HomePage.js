@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/SearchBar";
 import DataTable from "../../components/DataTable";
 import PdfViewer from "../../components/PdfViewer";
-import pdfFile from "../../assets/sample_file.pdf";
+import pdfFile from "../../assets/ActemraPrior_Auth.pdf";
 
 import Modal from "react-modal";
 import Pagination from "@mui/material/Pagination";
