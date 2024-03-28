@@ -28,7 +28,7 @@
 
 .findPolicy-row {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #cccccc;
   padding-left: 1%;
@@ -44,7 +44,7 @@
 .findPolicy-data {
   color: "#535252";
   text-align: left;
-  width:5rem;
+  width: 5rem;
   /* min-width: fit-content; */
 }
 
@@ -109,11 +109,16 @@
   gap: 5%;
   align-self: flex-end;
   margin-bottom: 2.5%;
+  cursor: pointer;
 }
 
 .collapse-button {
   color: var(--brand-color);
   font-size: 1.5rem;
+}
+
+.expand-icon {
+  cursor: pointer;
 }
 
 .pdf-contnr,
@@ -127,7 +132,7 @@
   padding: 2%;
   padding-top: 1%;
   gap: 1.5rem;
-  width: 30%;
+  width: 60%;
 }
 
 .pdf-contnr {

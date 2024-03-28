@@ -36,11 +36,11 @@ ul.nav li {
   transition: all 0.7s;
 }
 
-ul.nav li:first-child {
+/* ul.nav li:first-child {
 }
 
 ul.nav li:last-child {
-}
+} */
 
 ul.nav li:hover {
   background: rgba(233, 79, 28, 0.15);
@@ -82,4 +82,9 @@ ul.nav li.active {
   border: 0 20px 20px 0 solid black;
   left: 0;
   top: 50%;
+}
+.disabled {
+  opacity: 0.5; /* You can adjust the opacity to visually indicate the disabled state */
+  pointer-events: none; /* Disable pointer events on the tab */
+  cursor: not-allowed; /* Change cursor to indicate it's not clickable */
 }

@@ -1,25 +1,16 @@
 import React from "react";
-const TabNavItem = ({ id, title, activeTab, setActiveTab }) => {
+const TabNavItem = ({ id, title, activeTab, setActiveTab, disabled }) => {
   const handleClick = () => {
-    setActiveTab(id);
+    if (!disabled) setActiveTab(id);
   };
 
   return (
-    
-    <li onClick={handleClick} className={activeTab === id ? "active" : ""}>
-      
-        <div className="tab-title">
-          <div>{title}:</div>
+    <li onClick={handleClick} className={activeTab === id ? "active" : ""} disabled={!disabled} >
+      <div className="tab-title">
+        <div>{title}:</div>
+      </div>
 
-          
-        </div>
-          {/*  <div class="arrow-block">
-          <div class="arrow-right"></div>
-        </div>*/}
     </li>
- 
-      
-    
   );
 };
 export default TabNavItem;

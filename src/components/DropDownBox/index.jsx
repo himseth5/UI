@@ -34,7 +34,7 @@ function DropDownBox(props) {
         value: selectedValue.Concept_Review_Status,
       });
     }
-  }, [selectedValue]);
+  }, [selectedValue?.Concept_Review_Status]);
 
   const renderComponent = (type) => {
     switch (type) {

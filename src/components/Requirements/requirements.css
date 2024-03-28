@@ -33,27 +33,112 @@
 
 #requirement-name {
   color: "#535252";
+  width: 15rem;
 }
 
 #True {
-  background-color: #abe1a6;
+  background-color: green;
   color: white;
-  width: 5rem;
+  width: 100%;
   text-align: center;
   border-radius: 0.4rem;
-  padding: 1%;
+  padding: 2%;
   padding-left: 3%;
   padding-right: 3%;
   cursor: pointer;
 }
+
+.true-color{
+  background-color: green !important;
+}
 #False {
-  background-color: #e1a6a6;
+  background-color: red;
   color: white;
-  width: 5rem;
+  width: 100%;
   text-align: center;
   border-radius: 0.4rem;
-  padding: 1%;
+  padding: 2%;
   padding-left: 3%;
   padding-right: 3%;
   cursor: pointer;
+}
+.false-color{
+  background-color: red !important;
+}
+
+#Partial {
+  background-color: rgb(214, 214, 10);
+  color: white;
+  width: 100%;
+  text-align: center;
+  border-radius: 0.4rem;
+  padding: 2%;
+  padding-left: 3%;
+  padding-right: 3%;
+  cursor: pointer;
+}
+.partial-color{
+  background-color: rgb(214, 214, 10) !important;
+}
+
+.textcls {
+  display: flex;
+  justify-content: space-around;
+}
+.prntheader {
+  text-align: center;
+}
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-cell {
+  /* Equal space distribution */
+  border: 1px solid #dddddd;
+  text-align: center;
+    padding: 6px;
+    font-size: 13px;
+}
+
+.custom-select {
+  width: 100%; /* Full width */
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.custom-button {
+  width: 100%; /* Full width */
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.evidence-status-feedback-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.evidence-status-heading-contnr{
+  display: flex;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+
+.evidence-status-heading {
+  margin-left: 45%;
+  /* border-bottom: 0.1rem solid black; */
+}
+
+.evidence-close-button {
+  font-size: 1.85rem;
+  margin-left: auto;
+  padding-right: 0.5%;
+}
+
+.evidence-close-button:hover {
+  color: red;
 }

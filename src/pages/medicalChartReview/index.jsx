@@ -449,7 +449,7 @@ function MedicalChartReview() {
                     maxRows={8}
                     onChange={handleChange}
                     value={pastedText}
-                    placeholder="Type anything…"
+                    placeholder="Enter User Notes..."
                     InputProps={{
                       disableUnderline: false, // <== added this
                     }}

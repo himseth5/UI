@@ -26,6 +26,9 @@ const initialState = {
   pageNum: 0,
   toastMessage: "",
   messageType: "",
+  prior_auth_desc:"",
+  Tab_Status:false,
+  currentTabSelected:{}
 };
 export const appContext = React.createContext(initialState);
 
@@ -35,7 +38,7 @@ export const AppContextProvider = ({ children }) => {
     "userCredentials",
     null
   );
-  
+
   const getPdfDocuments = async () => {
     const url = getDocumentsUrl;
     dispatch({ type: "GET_DOCUMENTS_START", payload: true });
@@ -106,39 +109,42 @@ export const AppContextProvider = ({ children }) => {
 
 
 //manipulated getconceptevidence
-const getAllConceptEvidence = async (cds_identifier) => {
-  // const reviewArray = reviewStatus.filter((item) => item !== "");
-  // if (
-  //   cds_identifier !== "" &&
-  //   cds_identifier !== undefined &&
-  //   reviewArray.length > 0
-  // ) {
+// const getAllConceptEvidence = async (cds_identifier) => {
+ 
 
-    const evidencURL = getEvidenceURL + `${cds_identifier}`;
-    dispatch({ type: "GET_EVIDENCE_START", payload: true });
-    try {
-      const res = await axios.get(evidencURL);
-      const result = await res.data.res.clinical_evidence_summary;
+//     const evidencURL = getEvidenceURL + `${cds_identifier}`;
+//     dispatch({ type: "GET_EVIDENCE_START", payload: true });
 
-      let evidenceDetails;
-      evidenceDetails = result?.filter(
-        (item) => item.CDS_Identifier === cds_identifier 
-      );
+//     conceptPerIdentifier.map(async (item) => {
+//       const evidencURL = getEvidenceURL + `${item.CDS_Identifier}`;
+//       const cds_identifier = item.CDS_Identifier;
+//       try {
+//         const res = await axios.get(evidencURL);
+//         const result = await res.data.res.clinical_evidence_summary;
 
-      dispatch({ type: "GET_EVIDENCE", payload: evidenceDetails });
-    } catch (error) {
-      console.log(error);
-    }
-  
-};
+//         console.log("result of evidence_summary", result);
 
+//         let evidenceDetails;
+//         evidenceDetails = result?.filter(
+//           (item) => item.CDS_Identifier === cds_identifier
+//         );
+
+//         console.log("evidencedetails:", evidenceDetails);
+//         evidenceDetails.map((item) => (allEvidence = [...allEvidence, item]));
+
+//         console.log("all evidence:", allEvidence);
+//         dispatch({ type: "GET_EVIDENCE", payload: allEvidence });
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     });
+//   };
 
   const updateUserFeedback = async (data, ces_identifier) => {
     const URL = getCESURL + `${ces_identifier}`;
     try {
       const res = await axios.put(URL, data);
       const result = await res.data;
-      
     } catch (error) {}
   };
 
@@ -147,7 +153,6 @@ const getAllConceptEvidence = async (cds_identifier) => {
     try {
       const res = await axios.put(URL, data);
       const result = await res.data;
-      
     } catch (error) {}
   };
   const updateClinicalDocumentSummary = async (data, cds_identifier) => {
@@ -156,7 +161,10 @@ const getAllConceptEvidence = async (cds_identifier) => {
       toastMessage: "",
       taostType: "",
     };
-    dispatch({ type: "UPDATE_CLINICAL_DOCUMENT_START", payload: payLoadObject });
+    dispatch({
+      type: "UPDATE_CLINICAL_DOCUMENT_START",
+      payload: payLoadObject,
+    });
     const URL = getCDSURL + `${cds_identifier}`;
     const configObject = {
       method: "PUT",
@@ -175,17 +183,19 @@ const getAllConceptEvidence = async (cds_identifier) => {
   const updateDocumentStatus = async (data, identifier) => {
     const URL = getMainDocumentURL + `${identifier}`;
 
-    
     try {
       const res = await axios.put(URL, data);
       const result = await res.data;
-      
+
       const payLoadObject = {
         loading: false,
         toastMessage: "Record Updated SuccessFully",
         taostType: "Success",
       };
-      dispatch({ type: "UPDATE_CLINICAL_DOCUMENT_SUCCESS", payload: payLoadObject });
+      dispatch({
+        type: "UPDATE_CLINICAL_DOCUMENT_SUCCESS",
+        payload: payLoadObject,
+      });
     } catch (error) {}
   };
 
@@ -198,16 +208,18 @@ const getAllConceptEvidence = async (cds_identifier) => {
         loading: state.loading,
         identifierDetails: state.identifierDetails,
         evidenceResult: state.evidenceResult,
-        
+        Tab_Status:state.Tab_Status,
         pageNum: state.pageNum,
         userCredentials: state.userCredentials,
         messageType:state.messageType,
         toastMessage:state.toastMessage,
+        prior_auth_desc:state.prior_auth_desc,
+        currentTabSelected:state.currentTabSelected,
         setLoggedInState,
         getPdfDocuments,
         getDocumentDataPerIdentifier,
         getConceptEvidence,
-        getAllConceptEvidence,
+        
         updateUserFeedback,
         updateDocumentFeedback,
         updateClinicalDocumentSummary,

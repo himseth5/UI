@@ -69,6 +69,22 @@ export const AppReducer = (state, action) => {
         ...state,
         pageNum: action.payload,
       };
+    case "SET_PRIOR_AUTH_DESC":
+      return {
+        ...state,
+        prior_auth_desc: action.payload,
+      };
+    case "SET_TAB_STATUS":
+      console.log("yehhhhh");
+      return {
+        ...state,
+        Tab_Status: action.payload,
+      };
+    case "SET_DECISION_SUPPORT_TAB":
+      return {
+        ...state,
+        currentTabSelected: action.payload,
+      };
     default:
       return state;
   }

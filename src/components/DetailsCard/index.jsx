@@ -1,7 +1,20 @@
+import { useContext, useEffect } from "react";
 import "./detailsCard.css";
+import { appContext } from "../../context/AppContext";
 
 function DetailsCard(props) {
   const { cardHeader, cardData, type, documentStatus } = props;
+  const { dispatch } = useContext(appContext);
+  useEffect(() => {
+    if (type === "Auth") {
+     
+      dispatch({
+        type: "SET_PRIOR_AUTH_DESC",
+        payload: cardData[0]?.Prior_Auth_Description,
+      });
+    }
+  }, [cardData]);
+  
   const renderComponent = (type) => {
     const pageData = cardData[0];
 

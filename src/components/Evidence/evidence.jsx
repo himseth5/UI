@@ -44,6 +44,7 @@ const Evidence = ({ data, storeReferenceTextInArray }) => {
     }
   };
   const refrenceKeyObject = (obj) => {
+    
     try {
       const str = obj.replaceAll("'", '"');
 
@@ -88,7 +89,7 @@ const Evidence = ({ data, storeReferenceTextInArray }) => {
   };
   return (
     <div className="evidence-container">
-      <div className="evidence-heading">Evidence of Concept(s) </div>
+      <div className="evidence-heading">Evidence(s) </div>
       {data?.map((item, index) => (
         <div className="box-container">
         
